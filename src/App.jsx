@@ -1,5 +1,5 @@
 import { useSelector, useDispatch } from "react-redux";
-import { addStudent, updateStudent, deleteStudent } from "./features/student/studentSlice";
+import { addStudent, updateStudent, deleteStudent, searching } from "./features/student/studentSlice";
 import { useState } from "react";
 
 function App() {
@@ -15,6 +15,7 @@ function App() {
     const [name, setName] = useState('')
     const [age, setAge] = useState('')
     const [city, setCity] = useState('')
+    const [searchInput, setSearchInput] = useState('')
 
 
     const inputValues = {
@@ -26,9 +27,9 @@ function App() {
 
     const handleAddStudent = () => {
 
-        if (!name || !age || !city) {
-            return alert('fill fields firs')
-        }
+        // if (!name || !age || !city) {
+        //     return alert('fill fields firs')
+        // }
 
         dispatch(addStudent(inputValues))
         setName("")
@@ -81,9 +82,22 @@ function App() {
         setButton(null)
     }
 
+    const handleSearching = () => {
+        dispatch(searching(searchInput))
+    }
 
     return <>
-        <div className="container">
+        <div className="fluid-container w-100 bg-dark p-3">
+            <form onSubmit={(e) => e.preventDefault()} className="my-3">
+                <div className="input-group ">
+                    <input type="text"
+                        placeholder="Search..."
+                        className="form-control  w-75"
+                        value={searchInput}
+                        onChange={(e) => setSearchInput(e.target.value)} />
+                    <button className="btn btn-success w-25" onClick={handleSearching}>Search</button>
+                </div>
+            </form>
             <table className="table table-primary text-center">
                 <thead>
                     <tr>

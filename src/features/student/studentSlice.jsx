@@ -21,10 +21,13 @@ const studentSlice = createSlice({
         },
         deleteStudent: (state, action) => {
             state.students = state.students.filter(s => s.id !== action.payload)
+        },
+        searching: (state, action) => {
+            state.students = state.students.filter((s) => s.name.toLowerCase().includes(action.payload.toLowerCase()))
         }
     }
 })
 
-export const { addStudent, updateStudent, deleteStudent } = studentSlice.actions
+export const { addStudent, updateStudent, deleteStudent, searching } = studentSlice.actions
 
 export default studentSlice.reducer
