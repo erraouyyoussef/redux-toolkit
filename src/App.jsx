@@ -4,7 +4,7 @@ import { useState } from "react";
 
 function App() {
 
-
+    const [button, setButton] = useState(null)
     const student = useSelector(
         (state) => state.student.students
     )
@@ -24,20 +24,62 @@ function App() {
         city: city
     }
 
-    const handleAddStudent = (e) => {
-        e.preventDefault()
-        dispatch(addStudent(inputValues))
+    const handleAddStudent = () => {
 
+        if (!name || !age || !city) {
+            return alert('fill fields firs')
+        }
+
+        dispatch(addStudent(inputValues))
         setName("")
         setAge("")
         setCity("")
         setId(prev => prev += 1)
+
+
+
     }
 
     const handleDeleteStudent = (id) => {
         dispatch(deleteStudent(id))
     }
 
+    const handleUpdating = (id) => {
+        const s = student.find((s) => {
+            return s.id === id
+        })
+
+        if (s) {
+            setId(s.id)
+            setName(s.name)
+            setAge(s.age)
+            setCity(s.city)
+        }
+
+        setButton('Update Student')
+
+    }
+
+    const handleUpdateStudent = () => {
+        const newInputsValues = {
+            id: id,
+            name: name,
+            age: age,
+            city: city
+        }
+        dispatch(updateStudent(newInputsValues))
+
+        setName('')
+        setAge('')
+        setCity('')
+
+    }
+
+    const saveChanges = (e) => {
+        e.preventDefault()
+        button === null ? handleAddStudent() : handleUpdateStudent();
+        setButton(null)
+    }
 
 
     return <>
@@ -55,13 +97,13 @@ function App() {
                 <tbody>
                     {student.map((s, index) => (
                         < tr key={index} >
-                            <td>{s.id}</td>
+                            <td>{s.id + 1}</td>
                             <td>{s.name}</td>
                             <td>{s.age}</td>
                             <td>{s.city}</td>
                             <td>
-                                <button className="btn btn-danger me-2 btn-sm " onClick={()=>handleDeleteStudent(s.id)}>supprimer</button>
-                                <button className="btn btn-primary btn-sm " onClick={() => dispatch()}>modifier</button>
+                                <button className="btn btn-danger me-2 btn-sm " onClick={() => handleDeleteStudent(s.id)}>supprimer</button>
+                                <button className="btn btn-primary btn-sm " onClick={() => handleUpdating(s.id)}>modifier</button>
                             </td>
                         </tr>
                     ))}
@@ -82,8 +124,8 @@ function App() {
                     <input value={city} onChange={(e) => setCity(e.target.value)} id="city" type="text" className="mb3 form-control" />
                 </div>
 
-                <button button="submit" className="btn btn-primary w-100" onClick={handleAddStudent}>
-                    Add Student
+                <button button="submit" className="btn btn-primary w-100" onClick={saveChanges}>
+                    {button === null ? 'Add Student' : 'Update Student'}
                 </button>
             </form>
 

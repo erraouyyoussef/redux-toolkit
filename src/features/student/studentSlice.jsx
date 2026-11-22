@@ -16,6 +16,7 @@ const studentSlice = createSlice({
             if (student) {
                 student.name = action.payload.name
                 student.age = action.payload.age
+                student.city = action.payload.city
             }
         },
         deleteStudent: (state, action) => {
